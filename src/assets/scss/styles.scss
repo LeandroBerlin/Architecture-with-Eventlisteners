@@ -1,8 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import "~bootstrap/scss/bootstrap";
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: url('../img/glitch.png') center repeat;
+}
+
+.container {
+  background-color: #fff;
+  margin: 20vh auto;
+  border-radius: 25px;
+  padding: 2em;
+}
+
+input {
+  margin:1em 0;
+}
 
 .note {
   margin: 8px;
   padding: 8px;
-  background-color: rgb(255, 233, 111);
-  cursor: pointer;
 }
+
+#notes {
+  margin: 0 auto;
+}
+
+.pending {
+  background-color: rgb(255, 233, 111);
+}
+
+.completed {
+  background-color: rgb(51, 148, 72);
+  color: white;
+}
+
+span{
+  float:right;
+  margin-left: 2em;
+  display:block;
+}
+
+.statusIcon {
+  margin: 0 0.3em;
+}
+
+.removeIcon {
+  cursor: pointer;
+
+  right: 0;
+  padding-top: .3em;
+}
+

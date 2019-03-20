@@ -14,7 +14,9 @@ export default class Storage extends MyNiceEvents {
 
   addDataSet(dataParameter) {
     // this is data -> push to this.data array the new note
-    this.data.push(dataParameter)
+    console.log(dataParameter)
+    let newObj = { note: dataParameter.note, status: "pending", assigned: dataParameter.author }
+    this.data.push(newObj)
     // we update the ui with the new this.data
     this.emit("updated", this.data)
     // update local storage
@@ -27,6 +29,19 @@ export default class Storage extends MyNiceEvents {
     //   (item, index) => index != dataParameter
     // )
     this.data.splice(dataParameter, 1)
+    // we update the ui with the new this.data
+    this.emit("updated", this.data)
+    // update local storage
+    this.save()
+  }
+
+  changeStatus(dataParameter) {
+
+    console.log(dataParameter)
+    console.log(this.data[dataParameter.id])
+    console.log("new status " + dataParameter.status)
+
+    this.data[dataParameter.id]['status'] = dataParameter.status
     // we update the ui with the new this.data
     this.emit("updated", this.data)
     // update local storage
@@ -54,7 +69,7 @@ export default class Storage extends MyNiceEvents {
   }
 }
 
-export const noteStorage = new Storage("myAwesomeNote")
+export const noteStorage = new Storage("myCoolTodoList")
 
 noteStorage.on("addItem", note => {
   noteStorage.addDataSet(note)
@@ -66,6 +81,11 @@ noteStorage.on("updated", notes => {
 
 noteStorage.on("removeItem", note => {
   noteStorage.removeDataSet(note)
+})
+
+noteStorage.on("changeStatus", note => {
+  console.log(note.status)
+  noteStorage.changeStatus(note)
 })
 
 noteStorage.initFinished()

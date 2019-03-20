@@ -205,7 +205,13 @@ function (_MyNiceEvents) {
     key: "addDataSet",
     value: function addDataSet(dataParameter) {
       // this is data -> push to this.data array the new note
-      this.data.push(dataParameter); // we update the ui with the new this.data
+      console.log(dataParameter);
+      var newObj = {
+        note: dataParameter.note,
+        status: "pending",
+        assigned: dataParameter.author
+      };
+      this.data.push(newObj); // we update the ui with the new this.data
 
       this.emit("updated", this.data); // update local storage
 
@@ -219,6 +225,18 @@ function (_MyNiceEvents) {
       //   (item, index) => index != dataParameter
       // )
       this.data.splice(dataParameter, 1); // we update the ui with the new this.data
+
+      this.emit("updated", this.data); // update local storage
+
+      this.save();
+    }
+  }, {
+    key: "changeStatus",
+    value: function changeStatus(dataParameter) {
+      console.log(dataParameter);
+      console.log(this.data[dataParameter.id]);
+      console.log("new status " + dataParameter.status);
+      this.data[dataParameter.id]['status'] = dataParameter.status; // we update the ui with the new this.data
 
       this.emit("updated", this.data); // update local storage
 
@@ -253,7 +271,7 @@ function (_MyNiceEvents) {
 }(_Events__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
-var noteStorage = new Storage("myAwesomeNote");
+var noteStorage = new Storage("myCoolTodoList");
 noteStorage.on("addItem", function (note) {
   noteStorage.addDataSet(note);
 });
@@ -262,6 +280,10 @@ noteStorage.on("updated", function (notes) {
 });
 noteStorage.on("removeItem", function (note) {
   noteStorage.removeDataSet(note);
+});
+noteStorage.on("changeStatus", function (note) {
+  console.log(note.status);
+  noteStorage.changeStatus(note);
 });
 noteStorage.initFinished();
 
@@ -287,26 +309,50 @@ var $ = function $(selector) {
 };
 var domElements = {
   addNoteInput: $("#add-note"),
+  addAuthorInput: $("#add-author"),
   addNoteButton: $("#add-note-button"),
   noteContainer: $("#notes"),
-  noteDiv: null
+  noteDiv: null,
+  statusIcon: null,
+  removeIcon: null
 };
 var renderNotes = function renderNotes(notes) {
   domElements.noteContainer.innerHTML = notes.map(function (note, index) {
-    return "\n        <div class=\"note col-lg-3\" id=".concat(index, " title=\"Click to remove\">\n          ").concat(note, "\n        </div>\n      ");
+    return "\n        <div class=\"note col-lg-3 ".concat(note.status, "\"  id=").concat(index, ">\n          ").concat(note.note, " <span> <i class=\"fa fa-user assigned\"></i> ").concat(note.assigned, " \n          <i class=\"").concat(note.status == "pending" ? "fa fa-check-circle" : "far fa-edit ", " statusIcon\" title=\"Change status\"></i> \n          <i class=\"fas fa-times-circle removeIcon\" title=\"Click to remove\"></i></span>\n        </div>\n      ");
   }).join(""); // Only if I have the notes I can target them and add the eventListners
 
-  domElements.noteDiv = document.querySelectorAll(".note");
+  domElements.removeIcon = document.querySelectorAll(".removeIcon");
+  domElements.statusIcon = document.querySelectorAll(".statusIcon");
   targetNotes();
+  removeIcons();
+};
+
+var removeIcons = function removeIcons() {
+  // Check if we have a note and eventually attach an eventlistner
+  if (domElements.removeIcon !== null) domElements.removeIcon.forEach(function (oneDiv) {
+    oneDiv.addEventListener("click", function () {
+      var id = oneDiv.offsetParent.id;
+      console.log(id); // trigger
+
+      _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("removeItem", id);
+    });
+  });
 };
 
 var targetNotes = function targetNotes() {
   // Check if we have a note and eventually attach an eventlistner
-  if (domElements.noteDiv !== null) domElements.noteDiv.forEach(function (oneDiv) {
+  if (domElements.statusIcon !== null) domElements.statusIcon.forEach(function (oneDiv) {
     oneDiv.addEventListener("click", function () {
-      var id = oneDiv.id; // trigger
+      var id = oneDiv.offsetParent.id;
+      var isPending = oneDiv.offsetParent.classList.contains("pending");
+      var status = isPending ? "completed" : "pending";
+      var note = {
+        id: id,
+        status: status
+      };
+      console.log(note); // trigger
 
-      _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("removeItem", id);
+      _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("changeStatus", note);
     });
   });
 };
@@ -331,11 +377,14 @@ __webpack_require__.r(__webpack_exports__);
 
 var addNoteButton = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addNoteButton,
     addNoteInput = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addNoteInput,
-    noteDiv = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].noteDiv;
+    addAuthorInput = _helper__WEBPACK_IMPORTED_MODULE_2__["domElements"].addAuthorInput;
 addNoteButton.addEventListener("click", function () {
-  var note = addNoteInput.value;
+  var note = {
+    note: addNoteInput.value,
+    author: addAuthorInput.value
+  };
 
-  if (note) {
+  if (note.note && note.author) {
     _Storage__WEBPACK_IMPORTED_MODULE_1__["noteStorage"].emit("addItem", note);
     addNoteInput.value = "";
   }

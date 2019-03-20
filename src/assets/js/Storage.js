@@ -3,7 +3,6 @@
 // get Array -> localStorage.getItem -> transform: Array
 
 import MyNiceEvents from "./Events"
-
 import { renderNotes } from "./helper"
 
 export default class Storage extends MyNiceEvents {
@@ -14,27 +13,23 @@ export default class Storage extends MyNiceEvents {
   }
 
   addDataSet(dataParameter) {
-    //this is data -> push to this.data array the new note
+    // this is data -> push to this.data array the new note
     this.data.push(dataParameter)
-    //we update the ui with the new this.data
+    // we update the ui with the new this.data
     this.emit("updated", this.data)
     // update local storage
     this.save()
   }
 
   removeDataSet(dataParameter) {
-    // -> remove from this.data 
-
-    console.log(`OK Remove -> ${dataParameter}`)
-
-    // this.data.splice(dataParameter, 1)
-
-    this.data = this.data.filter(
-      (item, index) => index != dataParameter
-    )
-    // -> we update the ui with the new this.data
+    // remove from this.data 
+    // this.data = this.data.filter(
+    //   (item, index) => index != dataParameter
+    // )
+    this.data.splice(dataParameter, 1)
+    // we update the ui with the new this.data
     this.emit("updated", this.data)
-    // -> update local storage
+    // update local storage
     this.save()
   }
 
@@ -69,11 +64,8 @@ noteStorage.on("updated", notes => {
   renderNotes(notes)
 })
 
-noteStorage.on("removeItem",
-  note => {
-    console.log(note)
-    noteStorage.removeDataSet(note)
-  }
-)
+noteStorage.on("removeItem", note => {
+  noteStorage.removeDataSet(note)
+})
 
 noteStorage.initFinished()

@@ -204,8 +204,8 @@ function (_MyNiceEvents) {
   _createClass(Storage, [{
     key: "addDataSet",
     value: function addDataSet(dataParameter) {
-      //this is data -> push to this.data array the new note
-      this.data.push(dataParameter); //we update the ui with the new this.data
+      // this is data -> push to this.data array the new note
+      this.data.push(dataParameter); // we update the ui with the new this.data
 
       this.emit("updated", this.data); // update local storage
 
@@ -214,14 +214,13 @@ function (_MyNiceEvents) {
   }, {
     key: "removeDataSet",
     value: function removeDataSet(dataParameter) {
-      // -> remove from this.data 
-      console.log("OK Remove -> ".concat(dataParameter)); // this.data.splice(dataParameter, 1)
+      // remove from this.data 
+      // this.data = this.data.filter(
+      //   (item, index) => index != dataParameter
+      // )
+      this.data.splice(dataParameter, 1); // we update the ui with the new this.data
 
-      this.data = this.data.filter(function (item, index) {
-        return index != dataParameter;
-      }); // -> we update the ui with the new this.data
-
-      this.emit("updated", this.data); // -> update local storage
+      this.emit("updated", this.data); // update local storage
 
       this.save();
     }
@@ -262,7 +261,6 @@ noteStorage.on("updated", function (notes) {
   Object(_helper__WEBPACK_IMPORTED_MODULE_1__["renderNotes"])(notes);
 });
 noteStorage.on("removeItem", function (note) {
-  console.log(note);
   noteStorage.removeDataSet(note);
 });
 noteStorage.initFinished();

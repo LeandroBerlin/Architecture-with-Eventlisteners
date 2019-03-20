@@ -19,7 +19,9 @@ export const renderNotes = notes => {
         return `
         <div class="note col-lg-3 ${note.status}"  id=${index}>
           ${note.note} <span> <i class="fa fa-user assigned"></i> ${note.assigned} 
-          <i class="${note.status == "pending" ? "fa fa-check-circle" : "far fa-edit "} statusIcon" title="Change status"></i> 
+          <i class="
+          ${note.status == "pending" ? "fa fa-check-circle" : "far fa-edit "} 
+          statusIcon" title="Change status"></i> 
           <i class="fas fa-times-circle removeIcon" title="Click to remove"></i></span>
         </div>
       `
@@ -41,7 +43,6 @@ const removeIcons = () => {
     domElements.removeIcon.forEach(oneDiv => {
       oneDiv.addEventListener("click", () => {
         const id = oneDiv.offsetParent.id;
-        console.log(id)
         // trigger
         noteStorage.emit("removeItem", id)
       })
@@ -54,9 +55,10 @@ const targetNotes = () => {
     domElements.statusIcon.forEach(oneDiv => {
       oneDiv.addEventListener("click", () => {
         const id = oneDiv.offsetParent.id;
+        // checki
         const isPending = oneDiv.offsetParent.classList.contains("pending");
-        const status = (isPending ? "completed" : "pending")
-        const note = { id, status }
+        const nextStatus = (isPending ? "completed" : "pending")
+        const note = { id, nextStatus }
         console.log(note)
         // trigger
         noteStorage.emit("changeStatus", note)

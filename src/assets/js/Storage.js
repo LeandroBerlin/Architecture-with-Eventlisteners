@@ -83,6 +83,7 @@ noteStorage.on("removeItem", note => {
   noteStorage.removeDataSet(note)
 })
 
+
 noteStorage.on("changeStatus", note => {
   console.log(note.status)
   noteStorage.changeStatus(note)

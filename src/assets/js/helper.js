@@ -38,7 +38,7 @@ export const renderNotes = notes => {
 }
 
 const removeIcons = () => {
-  // Check if we have a note and eventually attach an eventlistner
+  // Check if we have a remove icons and eventually attach an eventlistner
   if (domElements.removeIcon !== null)
     domElements.removeIcon.forEach(oneDiv => {
       oneDiv.addEventListener("click", () => {
@@ -50,17 +50,15 @@ const removeIcons = () => {
 }
 
 const targetNotes = () => {
-  // Check if we have a note and eventually attach an eventlistner
+  // Check if we have a status icons and eventually attach an eventlistner
   if (domElements.statusIcon !== null)
     domElements.statusIcon.forEach(oneDiv => {
       oneDiv.addEventListener("click", () => {
         const id = oneDiv.offsetParent.id;
-        // checki
         const isPending = oneDiv.offsetParent.classList.contains("pending");
         const nextStatus = (isPending ? "completed" : "pending")
         const note = { id, nextStatus }
-        console.log(note)
-        // trigger
+
         noteStorage.emit("changeStatus", note)
       })
     })

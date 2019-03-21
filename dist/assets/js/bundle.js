@@ -233,10 +233,7 @@ function (_MyNiceEvents) {
   }, {
     key: "changeStatus",
     value: function changeStatus(dataParameter) {
-      console.log(dataParameter);
-      console.log(this.data[dataParameter.id]);
-      console.log("new status " + dataParameter.nextStatus);
-      this.data[dataParameter.id]['status'] = dataParameter.nextStatus; // we update the ui with the new this.data
+      this.data[dataParameter.id].status = dataParameter.nextStatus; // we update the ui with the new this.data
 
       this.emit("updated", this.data); // update local storage
 
@@ -282,7 +279,6 @@ noteStorage.on("removeItem", function (note) {
   noteStorage.removeDataSet(note);
 });
 noteStorage.on("changeStatus", function (note) {
-  console.log(note.status);
   noteStorage.changeStatus(note);
 });
 noteStorage.initFinished();
@@ -328,7 +324,7 @@ var renderNotes = function renderNotes(notes) {
 };
 
 var removeIcons = function removeIcons() {
-  // Check if we have a note and eventually attach an eventlistner
+  // Check if we have a remove icons and eventually attach an eventlistner
   if (domElements.removeIcon !== null) domElements.removeIcon.forEach(function (oneDiv) {
     oneDiv.addEventListener("click", function () {
       var id = oneDiv.offsetParent.id; // trigger
@@ -339,19 +335,16 @@ var removeIcons = function removeIcons() {
 };
 
 var targetNotes = function targetNotes() {
-  // Check if we have a note and eventually attach an eventlistner
+  // Check if we have a status icons and eventually attach an eventlistner
   if (domElements.statusIcon !== null) domElements.statusIcon.forEach(function (oneDiv) {
     oneDiv.addEventListener("click", function () {
-      var id = oneDiv.offsetParent.id; // checki
-
+      var id = oneDiv.offsetParent.id;
       var isPending = oneDiv.offsetParent.classList.contains("pending");
       var nextStatus = isPending ? "completed" : "pending";
       var note = {
         id: id,
         nextStatus: nextStatus
       };
-      console.log(note); // trigger
-
       _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("changeStatus", note);
     });
   });

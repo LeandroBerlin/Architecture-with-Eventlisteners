@@ -36,12 +36,7 @@ export default class Storage extends MyNiceEvents {
   }
 
   changeStatus(dataParameter) {
-
-    console.log(dataParameter)
-    console.log(this.data[dataParameter.id])
-    console.log("new status " + dataParameter.nextStatus)
-
-    this.data[dataParameter.id]['status'] = dataParameter.nextStatus
+    this.data[dataParameter.id].status = dataParameter.nextStatus
     // we update the ui with the new this.data
     this.emit("updated", this.data)
     // update local storage
@@ -85,7 +80,6 @@ noteStorage.on("removeItem", note => {
 
 
 noteStorage.on("changeStatus", note => {
-  console.log(note.status)
   noteStorage.changeStatus(note)
 })
 

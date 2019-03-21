@@ -39,9 +39,9 @@ export default class Storage extends MyNiceEvents {
 
     console.log(dataParameter)
     console.log(this.data[dataParameter.id])
-    console.log("new status " + dataParameter.status)
+    console.log("new status " + dataParameter.nextStatus)
 
-    this.data[dataParameter.id]['status'] = dataParameter.status
+    this.data[dataParameter.id]['status'] = dataParameter.nextStatus
     // we update the ui with the new this.data
     this.emit("updated", this.data)
     // update local storage

@@ -235,8 +235,8 @@ function (_MyNiceEvents) {
     value: function changeStatus(dataParameter) {
       console.log(dataParameter);
       console.log(this.data[dataParameter.id]);
-      console.log("new status " + dataParameter.status);
-      this.data[dataParameter.id]['status'] = dataParameter.status; // we update the ui with the new this.data
+      console.log("new status " + dataParameter.nextStatus);
+      this.data[dataParameter.id]['status'] = dataParameter.nextStatus; // we update the ui with the new this.data
 
       this.emit("updated", this.data); // update local storage
 
@@ -318,7 +318,7 @@ var domElements = {
 };
 var renderNotes = function renderNotes(notes) {
   domElements.noteContainer.innerHTML = notes.map(function (note, index) {
-    return "\n        <div class=\"note col-lg-3 ".concat(note.status, "\"  id=").concat(index, ">\n          ").concat(note.note, " <span> <i class=\"fa fa-user assigned\"></i> ").concat(note.assigned, " \n          <i class=\"").concat(note.status == "pending" ? "fa fa-check-circle" : "far fa-edit ", " statusIcon\" title=\"Change status\"></i> \n          <i class=\"fas fa-times-circle removeIcon\" title=\"Click to remove\"></i></span>\n        </div>\n      ");
+    return "\n        <div class=\"note col-lg-3 ".concat(note.status, "\"  id=").concat(index, ">\n          ").concat(note.note, " <span> <i class=\"fa fa-user assigned\"></i> ").concat(note.assigned, " \n          <i class=\"\n          ").concat(note.status == "pending" ? "fa fa-check-circle" : "far fa-edit ", " \n          statusIcon\" title=\"Change status\"></i> \n          <i class=\"fas fa-times-circle removeIcon\" title=\"Click to remove\"></i></span>\n        </div>\n      ");
   }).join(""); // Only if I have the notes I can target them and add the eventListners
 
   domElements.removeIcon = document.querySelectorAll(".removeIcon");
@@ -331,8 +331,7 @@ var removeIcons = function removeIcons() {
   // Check if we have a note and eventually attach an eventlistner
   if (domElements.removeIcon !== null) domElements.removeIcon.forEach(function (oneDiv) {
     oneDiv.addEventListener("click", function () {
-      var id = oneDiv.offsetParent.id;
-      console.log(id); // trigger
+      var id = oneDiv.offsetParent.id; // trigger
 
       _Storage__WEBPACK_IMPORTED_MODULE_0__["noteStorage"].emit("removeItem", id);
     });
@@ -343,12 +342,13 @@ var targetNotes = function targetNotes() {
   // Check if we have a note and eventually attach an eventlistner
   if (domElements.statusIcon !== null) domElements.statusIcon.forEach(function (oneDiv) {
     oneDiv.addEventListener("click", function () {
-      var id = oneDiv.offsetParent.id;
+      var id = oneDiv.offsetParent.id; // checki
+
       var isPending = oneDiv.offsetParent.classList.contains("pending");
-      var status = isPending ? "completed" : "pending";
+      var nextStatus = isPending ? "completed" : "pending";
       var note = {
         id: id,
-        status: status
+        nextStatus: nextStatus
       };
       console.log(note); // trigger
 
